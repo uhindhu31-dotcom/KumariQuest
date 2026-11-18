@@ -1,904 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}{{ destination.name }} | KumariQuest{% endblock %}
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>{{ destination.name }} | KumariQuest</title>
-
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #f5f7fb;
-            color: #1f2937;
-        }
-
-        nav {
-            height: 70px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 8%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-
-        .logo {
-            font-size: 26px;
-            font-weight: bold;
-            color: #0f766e;
-        }
-
-        .logo span {
-            color: #f59e0b;
-        }
-
-        .back {
-            text-decoration: none;
-            color: #0f766e;
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
-
-        .destination-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
-
-        .destination-header {
-            background: linear-gradient(
-                120deg,
-                #0f766e,
-                #14b8a6
-            );
-
-            color: white;
-            padding: 60px 40px;
-            text-align: center;
-        }
-
-        .destination-icon {
-    font-size: 70px;
-    margin-bottom: 15px;
-}
-
-.destination-image {
-    width: 100%;
-    max-width: 700px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 15px;
-    margin-bottom: 20px;
-}
-
-        .destination-header h1 {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        .destination-header p {
-            font-size: 17px;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        .content h2 {
-            color: #0f766e;
-            margin-bottom: 15px;
-        }
-
-        .description {
-            color: #4b5563;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .detail-box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .detail-box strong {
-            display: block;
-            color: #0f766e;
-            margin-bottom: 8px;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 30px;
-            background: #f59e0b;
-            color: white;
-            text-decoration: none;
-            padding: 13px 25px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        @media (max-width: 700px) {
-
-            .destination-header h1 {
-                font-size: 30px;
-            }
-
-            .details {
-                grid-template-columns: 1fr;
-            }
-
-            .content {
-                padding: 25px;
-            }
-        }
-
-        /* Google Maps Button */
-
-    .map-button {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 10px 16px;
-        background: #0f766e;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-size: 14px;
-    }
-
-    .map-button:hover {
-        background: #115e59;
-    }
-
-    .nearby-section {
-    margin-top: 40px;
-    padding: 30px;
-    background: #f0fdfa;
-    border-radius: 15px;
-}
-
-.nearby-section h2 {
-    color: #0f766e;
-    margin-bottom: 8px;
-}
-
-.nearby-section p {
-    color: #555;
-}
-
-.nearby-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
-    margin-top: 25px;
-}
-
-.nearby-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    text-decoration: none;
-    color: #115e59;
-    font-size: 30px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-.nearby-card span {
-    display: block;
-    margin-top: 10px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.nearby-card:hover {
-    transform: translateY(-3px);
-}
-
-@media (max-width: 700px) {
-    .nearby-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.map-section {
-    margin-top: 35px;
-    padding: 25px;
-    background: #f0fdfa;
-    border-radius: 15px;
-}
-
-.map-section h2 {
-    color: #0f766e;
-    margin-bottom: 8px;
-}
-
-.map-section p {
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.nearby-destinations {
-    margin-top: 40px;
-    padding: 30px;
-    background: #f8fafc;
-    border-radius: 15px;
-}
-
-.nearby-destinations h2 {
-    color: #0f766e;
-}
-
-.nearby-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.nearby-destination-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-.nearby-destination-card img,
-.nearby-placeholder {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-}
-
-.nearby-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ccfbf1;
-    font-size: 45px;
-}
-
-.nearby-content {
-    padding: 15px;
-}
-
-.nearby-content h3 {
-    color: #115e59;
-}
-
-.nearby-content a {
-    display: inline-block;
-    margin-top: 8px;
-    padding: 8px 12px;
-    background: #0f766e;
-    color: white;
-    text-decoration: none;
-    border-radius: 7px;
-    font-size: 13px;
-}
-
-@media (max-width: 800px) {
-    .nearby-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 500px) {
-    .nearby-cards {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* LIVE LOCATION MAP */
-
-.live-map-section {
-    margin-top: 35px;
-    padding: 25px;
-    background: #f0fdfa;
-    border-radius: 15px;
-}
-
-.live-map-section h2 {
-    color: #0f766e;
-    margin-bottom: 8px;
-}
-
-.live-map-section p {
-    color: #555;
-    margin-bottom: 15px;
-}
-
-#liveMap {
-    width: 100%;
-    height: 450px;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.location-status {
-    margin-top: 15px;
-    padding: 12px;
-    background: white;
-    border-radius: 10px;
-    color: #374151;
-    font-size: 14px;
-}
-
-.route-info {
-    margin-top: 10px;
-    padding: 12px;
-    background: white;
-    border-radius: 10px;
-    color: #115e59;
-    font-weight: bold;
-}
-
-    </style>
-
-    <!-- Leaflet Map -->
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
-<script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
-</head>
-
-
-<body>
-
-    <nav>
-
-        <div class="logo">
-            Kumari<span>Quest</span>
-        </div>
-
-        <a href="/home/" class="back">
-            ← Back to Home
-        </a>
-
-    </nav>
-
-
-    <div class="container">
-
-        <div class="destination-card">
-
-            <div class="destination-header">
-
+{% block content %}
+<section class="detail-hero">
     {% if destination.image %}
-        <img src="{{ destination.image.url }}"
-             alt="{{ destination.name }}"
-             class="destination-image">
-    {% else %}
-        <div class="destination-icon">
-            📍
-        </div>
+        <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
     {% endif %}
-
-    <h1>
-        {{ destination.name }}
-    </h1>
-
-    <p>
-        {{ destination.category }}
-    </p>
-
-</div>
-
-
-            <div class="content">
-
-                <h2>About this Destination</h2>
-
-                <p class="description">
-                    {{ destination.description }}
-                </p>
-
-
-                <div class="details">
-
-                    <div class="detail-box">
-
-    <strong>📍 Location</strong>
-
-    <p>{{ destination.location }}</p>
-
-    <a
-        href="https://www.google.com/maps/search/?api=1&query={{ destination.name|urlencode }}, {{ destination.location|urlencode }}"
-        target="_blank"
-        class="map-button"
-    >
-        📍 View on Google Maps
-    </a>
-
-</div>
-
-<div class="map-section">
-
-    <h2>🗺️ Explore Location</h2>
-
-    <p>
-        View {{ destination.name }} on the map.
-    </p>
-
-    <iframe
-        src="https://www.google.com/maps?q={{ destination.name|urlencode }},{{ destination.location|urlencode }}&output=embed"
-        width="100%"
-        height="350"
-        style="border:0; border-radius:15px;"
-        loading="lazy"
-        allowfullscreen>
-    </iframe>
-
-</div>
-
-
-<section class="nearby-destinations">
-
-    <h2>📍 Nearby Destinations</h2>
-
-    <p>Explore more places you may like.</p>
-
-    <div class="nearby-cards">
-
-        {% for place in nearby_destinations %}
-
-            <div class="nearby-destination-card">
-
-                {% if place.image %}
-                    <img
-                        src="{{ place.image.url }}"
-                        alt="{{ place.name }}"
-                    >
-                {% else %}
-                    <div class="nearby-placeholder">
-                        📍
-                    </div>
-                {% endif %}
-
-                <div class="nearby-content">
-
-                    <h3>{{ place.name }}</h3>
-
-                    <p>
-                        {{ place.category }}
-                    </p>
-
-                    <a
-                        href="{% url 'destination_detail' place.pk %}"
-                    >
-                        View Destination →
-                    </a>
-
-                </div>
-
-            </div>
-
-        {% empty %}
-
-            <p>No other destinations available yet.</p>
-
-        {% endfor %}
-
+    <div class="detail-hero-content">
+        <span class="eyebrow">{{ destination.category }}</span>
+        <h1>{{ destination.name }}</h1>
+        <p>📍 {{ destination.location }}</p>
     </div>
-
 </section>
 
+<div class="container">
+    <div class="detail-layout">
+        <section class="content-panel">
+            <span class="eyebrow">About the destination</span>
+            <h2>Get to know {{ destination.name }}</h2>
+            <p>{{ destination.description }}</p>
 
-                    <div class="detail-box">
-
-                        <strong>🕐 Visiting Hours</strong>
-
-                        {{ destination.visiting_hours }}
-
-                    </div>
-
-
-                    <div class="detail-box">
-
-                        <strong>🌤️ Best Time to Visit</strong>
-
-                        {{ destination.best_time }}
-
-                    </div>
-
-
-                    <div class="detail-box">
-
-                        <strong>🎟️ Entry Fee</strong>
-
-                        {{ destination.entry_fee }}
-
-                    </div>
-
+            <div class="details-grid">
+                <div class="detail-item">
+                    <strong>Location</strong>
+                    <span>{{ destination.location }}</span>
                 </div>
-
-
-                <a href="/" class="back-btn">
-                    ← Explore More Destinations
-                </a>
-
+                <div class="detail-item">
+                    <strong>Category</strong>
+                    <span>{{ destination.category }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Visiting hours</strong>
+                    <span>{{ destination.visiting_hours }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Best time to visit</strong>
+                    <span>{{ destination.best_time }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Entry fee</strong>
+                    <span>{{ destination.entry_fee }}</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Budget level</strong>
+                    <span>{{ destination.budget_level }}</span>
+                </div>
             </div>
+        </section>
 
+        <aside class="content-panel">
+            <span class="eyebrow">Plan your visit</span>
+            <h2>Find your way</h2>
+            <p>Open the location in Google Maps for current directions and map information.</p>
+            {% if destination.latitude and destination.longitude %}
+                <a class="map-button" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query={{ destination.latitude }},{{ destination.longitude }}">Open in Google Maps ↗</a>
+                <iframe class="map-frame" title="Map showing {{ destination.name }}" src="https://www.google.com/maps?q={{ destination.latitude }},{{ destination.longitude }}&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            {% else %}
+                <a class="map-button" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query={{ destination.name|urlencode }},{{ destination.location|urlencode }}">Search on Google Maps ↗</a>
+                <div class="feature-panel" style="margin-top:16px;">
+                    <strong>Map preview unavailable</strong>
+                    <p>This destination does not have coordinates in the current listing. Use the map search link to look it up.</p>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+
+    <section class="content-panel" style="margin-top:24px;">
+        <span class="eyebrow">Nearby services</span>
+        <h2>Explore nearby places</h2>
+        <p>These links open live Google Maps searches. KumariQuest does not currently verify business details, prices, or availability.</p>
+        <div class="nearby-grid">
+            <a class="nearby-card" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/restaurants+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"><span aria-hidden="true">🍴</span>Restaurants</a>
+            <a class="nearby-card" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/hotels+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"><span aria-hidden="true">🏨</span>Hotels</a>
+            <a class="nearby-card" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/hospitals+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"><span aria-hidden="true">🏥</span>Hospitals</a>
+            <a class="nearby-card" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/ATMs+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"><span aria-hidden="true">🏧</span>ATMs</a>
+            <a class="nearby-card" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/taxi+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"><span aria-hidden="true">🚕</span>Transport</a>
         </div>
-
-    </div>
-
-    <section class="nearby-section">
-
-    <h2>📍 Explore Nearby Places</h2>
-
-    <p>
-        Find useful places near {{ destination.name }}.
-    </p>
-
-    <div class="nearby-grid">
-
-        <a
-            href="https://www.google.com/maps/search/restaurants+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"
-            target="_blank"
-            class="nearby-card"
-        >
-            🍴
-            <span>Restaurants</span>
-        </a>
-
-        <a
-            href="https://www.google.com/maps/search/hotels+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"
-            target="_blank"
-            class="nearby-card"
-        >
-            🏨
-            <span>Hotels</span>
-        </a>
-
-        <a
-            href="https://www.google.com/maps/search/hospitals+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"
-            target="_blank"
-            class="nearby-card"
-        >
-            🏥
-            <span>Hospitals</span>
-        </a>
-
-        <a
-            href="https://www.google.com/maps/search/ATMs+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"
-            target="_blank"
-            class="nearby-card"
-        >
-            🏧
-            <span>ATMs</span>
-        </a>
-
-        <a
-            href="https://www.google.com/maps/search/taxi+near+{{ destination.name|urlencode }}+{{ destination.location|urlencode }}"
-            target="_blank"
-            class="nearby-card"
-        >
-            🚕
-            <span>Transport</span>
-        </a>
-
-    </div>
-
-</section>
-
-<script>
-
-const destinationName = "{{ destination.name|escapejs }}";
-const destinationLocation = "{{ destination.location|escapejs }}";
-
-let map;
-let userMarker;
-let destinationMarker;
-let routeLine;
-
-const statusBox = document.getElementById("locationStatus");
-const routeInfo = document.getElementById("routeInfo");
-
-
-/*
-    First get destination coordinates
-    using OpenStreetMap Nominatim.
-*/
-
-function getDestinationLocation() {
-
-    const mapElement = document.getElementById("liveMap");
-
-    const lat = parseFloat(mapElement.dataset.lat);
-    const lon = parseFloat(mapElement.dataset.lon);
-
-    if (isNaN(lat) || isNaN(lon)) {
-        return null;
-    }
-
-    return {
-        lat: lat,
-        lon: lon
-    };
-}
-
-
-/*
-    Calculate route using OSRM.
-*/
-
-async function getRoute(
-    userLat,
-    userLon,
-    destinationLat,
-    destinationLon
-) {
-
-    const routeUrl =
-        "https://router.project-osrm.org/route/v1/driving/"
-        + userLon + "," + userLat
-        + ";"
-        + destinationLon + "," + destinationLat
-        + "?overview=full&geometries=geojson";
-
-    try {
-
-        const response = await fetch(routeUrl);
-
-        const data = await response.json();
-
-        if (data.code !== "Ok") {
-
-            routeInfo.innerHTML =
-                "❌ Route could not be calculated.";
-
-            return;
-        }
-
-        const route = data.routes[0];
-
-        const distanceKm =
-            (route.distance / 1000).toFixed(2);
-
-        const durationMinutes =
-            Math.round(route.duration / 60);
-
-        routeInfo.innerHTML =
-            "🛣️ Distance: "
-            + distanceKm
-            + " km &nbsp; | &nbsp; "
-            + "⏱️ Approx. travel time: "
-            + durationMinutes
-            + " minutes";
-
-
-        /*
-            Draw route on map.
-        */
-
-        if (routeLine) {
-            map.removeLayer(routeLine);
-        }
-
-        routeLine = L.geoJSON(route.geometry, {
-            style: {
-                color: "#0f766e",
-                weight: 5,
-                opacity: 0.8
-            }
-        }).addTo(map);
-
-
-
-        /*
-            Fit map to route.
-        */
-
-        map.fitBounds(routeLine.getBounds(), {
-            padding: [30, 30]
-        });
-
-    } catch (error) {
-
-        routeInfo.innerHTML =
-            "❌ Unable to calculate route.";
-
-    }
-}
-
-
-/*
-    Main function.
-*/
-
-async function initializeLiveMap() {
-
-    statusBox.innerHTML =
-        "📍 Finding destination...";
-
-    const destination =
-         getDestinationLocation();
-
-    if (!destination.lat || !destination.lon) {
-    statusBox.innerHTML =
-        "❌ Destination coordinates are not available.";
-    return;
-}
-
-
-    /*
-        Create map initially around destination.
-    */
-
-    map = L.map("liveMap").setView(
-        [destination.lat, destination.lon],
-        14
-    );
-
-
-    /*
-        OpenStreetMap tiles.
-    */
-
-
-
-    /*
-        Destination marker.
-    */
-
-    destinationMarker = L.marker([
-        destination.lat,
-        destination.lon
-    ]).addTo(map);
-
-    destinationMarker.bindPopup(
-        "<b>📍 "
-        + destinationName
-        + "</b>"
-    ).openPopup();
-
-
-    /*
-        Request user's live location.
-    */
-
-    if (!navigator.geolocation) {
-
-        statusBox.innerHTML =
-            "❌ Your browser does not support location services.";
-
-        return;
-    }
-
-
-    navigator.geolocation.getCurrentPosition(
-
-        function(position) {
-
-            const userLat =
-                position.coords.latitude;
-
-            const userLon =
-                position.coords.longitude;
-
-            const navigationButton =
-    document.getElementById("navigationButton");
-
-navigationButton.href =
-    "https://www.google.com/maps/dir/?api=1"
-    + "&origin=" + userLat + "," + userLon
-    + "&destination=" + destinationLat + "," + destinationLon
-    + "&travelmode=driving";
-
-navigationButton.style.display = "inline-block";
-
-
-            /*
-                Add user marker.
-            */
-
-            userMarker = L.marker([
-                userLat,
-                userLon
-            ]).addTo(map);
-
-            userMarker.bindPopup(
-                "<b>🔵 Your Current Location</b>"
-            );
-
-
-            /*
-                Accuracy circle.
-            */
-
-            L.circle([
-                userLat,
-                userLon
-            ], {
-                radius: position.coords.accuracy,
-                color: "#2563eb",
-                fillOpacity: 0.15
-            }).addTo(map);
-
-
-            statusBox.innerHTML =
-                "✅ Your current location is detected.";
-
-
-            /*
-                Calculate route.
-            */
-
-            getRoute(
-                userLat,
-                userLon,
-                destination.lat,
-                destination.lon
-            );
-
-        },
-
-        function(error) {
-
-            if (error.code === 1) {
-
-                statusBox.innerHTML =
-                    "⚠️ Location permission was denied. " +
-                    "Please allow location access in your browser.";
-
-            } else {
-
-                statusBox.innerHTML =
-                    "❌ Unable to detect your location.";
-
-            }
-
-        },
-
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-        }
-
-    );
-
-}
-
-
-/*
-    Start map.
-*/
-
-initializeLiveMap();
-
-</script>
-
-</body>
-
-</html>
+    </section>
+
+    {% if nearby_destinations %}
+        <section class="section" style="padding-bottom:0;">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">Keep exploring</span>
+                    <h2>More destinations</h2>
+                </div>
+            </div>
+            <div class="cards">
+                {% for place in nearby_destinations %}
+                    <article class="card">
+                        <div class="card-image">
+                            {% if place.image %}
+                                <img src="{{ place.image.url }}" alt="{{ place.name }}" loading="lazy">
+                            {% else %}
+                                <span aria-hidden="true">📍</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-content">
+                            <span class="category">{{ place.category }}</span>
+                            <h3>{{ place.name }}</h3>
+                            <p class="card-location">📍 {{ place.location }}</p>
+                            <a class="text-link" href="{% url 'destination_detail' place.pk %}">View destination →</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+    <a class="back-link" href="{% url 'explore' %}">← Back to destinations</a>
+</div>
+{% endblock %}

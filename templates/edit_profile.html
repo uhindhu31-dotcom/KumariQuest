@@ -1,184 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Profile | KumariQuest</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(120deg, #ccfbf1, #fff7ed);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+{% block title %}Edit profile | KumariQuest{% endblock %}
 
-        .profile-box {
-            width: 420px;
-            background: white;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #0f766e;
-        }
-
-        .profile-image {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 20px auto;
-            border: 4px solid #0f766e;
-        }
-
-        .default-image {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: #ccfbf1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 50px;
-            margin: 20px auto;
-        }
-
-        label {
-            display: block;
-            margin-top: 18px;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-        }
-
-        .save-btn {
-            width: 100%;
-            margin-top: 25px;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            background: #0f766e;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .save-btn:hover {
-            background: #115e59;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 18px;
-            color: #0f766e;
-            text-decoration: none;
-        }
-
-        .error {
-            color: red;
-            text-align: center;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="profile-box">
-
-    <h1>✏️ Edit Profile</h1>
-
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% endif %}
-
-    {% if profile.profile_image %}
-        <img
-            src="{{ profile.profile_image.url }}"
-            class="profile-image"
-            alt="Profile Picture"
-        >
-    {% else %}
-        <div class="default-image">
-            👤
-        </div>
-    {% endif %}
-
-    <form method="POST" enctype="multipart/form-data">
-
-        {% csrf_token %}
-
-        <label>Username</label>
-
-        <input
-            type="text"
-            name="username"
-            value="{{ user.username }}"
-            required
-        >
-
-        <label>Email</label>
-
-        <input
-            type="email"
-            name="email"
-            value="{{ user.email }}"
-        >
-
-        <label>New Password</label>
-
-<input
-    type="password"
-    name="password"
-    id="newPassword"
-    placeholder="Enter new password"
->
-
-<label>Confirm New Password</label>
-
-<input
-    type="password"
-    name="confirm_password"
-    id="confirmPassword"
-    placeholder="Confirm new password"
->
-
-        <label>Profile Picture</label>
-
-        
-        <input
-            type="file"
-            name="profile_image"
-            accept="image/*"
-        >
-        <label>New Password</label>
-
-
-
-        <button type="submit" class="save-btn">
-            Save Changes
-        </button>
-
-    </form>
-
-    <a href="{% url 'profile' %}" class="back">
-        ← Back to Profile
-    </a>
-
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Account settings</span>
+        <h1>Edit your profile</h1>
+        <p>Update your account information and profile picture.</p>
+    </div>
+</section>
+<div class="container section" style="padding-top:30px;">
+    <div class="form-card" style="margin:0 auto;">
+        {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+        {% if profile.profile_image %}
+            <img class="profile-avatar" src="{{ profile.profile_image.url }}" alt="Current profile image">
+        {% else %}
+            <div class="profile-avatar" aria-hidden="true" style="display:grid;place-items:center;font-size:2.4rem;">👤</div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="form-stack">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" value="{{ user.username }}" autocomplete="username" required>
+            </div>
+            <div class="form-field">
+                <label for="email">Email address</label>
+                <input id="email" type="email" name="email" value="{{ user.email }}" autocomplete="email">
+            </div>
+            <div class="form-field">
+                <label for="newPassword">New password</label>
+                <div class="password-field">
+                    <input id="newPassword" type="password" name="password" autocomplete="new-password">
+                    <button class="password-toggle" type="button" data-password-toggle="newPassword" aria-label="Show password">Show</button>
+                </div>
+                <p class="help">Leave blank to keep your current password.</p>
+            </div>
+            <div class="form-field">
+                <label for="confirmPassword">Confirm new password</label>
+                <input id="confirmPassword" type="password" name="confirm_password" autocomplete="new-password">
+            </div>
+            <div class="form-field">
+                <label for="profileImage">Profile picture</label>
+                <input id="profileImage" type="file" name="profile_image" accept="image/*">
+            </div>
+            <button class="submit-button" type="submit">Save changes</button>
+        </form>
+        <a class="back-link" href="{% url 'profile' %}">← Back to profile</a>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

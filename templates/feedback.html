@@ -1,164 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>KumariQuest - Feedback</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fa;
-            margin: 0;
-        }
+{% block title %}Feedback | KumariQuest{% endblock %}
 
-        .container {
-            width: 80%;
-            max-width: 900px;
-            margin: 50px auto;
-        }
-
-        .feedback-box {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .review {
-            background: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-        }
-
-        .stars {
-            color: #f5a623;
-        }
-
-        .back-home-btn {
-    display: inline-block;
-    margin: 10px 0 20px;
-    padding: 10px 18px;
-    background: #0f766e;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-}
-
-.back-home-btn:hover {
-    opacity: 0.9;
-}
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="feedback-box">
-
-        <h1>⭐ Website Feedback</h1>
-
-        <p>Share your experience with KumariQuest.</p>
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            <label><strong>Rating</strong></label>
-
-            <select name="rating" required>
-                <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
-                <option value="4">⭐⭐⭐⭐ Very Good</option>
-                <option value="3">⭐⭐⭐ Good</option>
-                <option value="2">⭐⭐ Fair</option>
-                <option value="1">⭐ Poor</option>
-            </select>
-
-            <label><strong>Your Feedback</strong></label>
-
-            <textarea
-                name="comment"
-                placeholder="Tell us about your experience..."
-                required></textarea>
-
-            <button type="submit">
-                Submit Feedback
-            </button>
-
-        </form>
-
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">Help us improve</span>
+        <h1>Share your feedback</h1>
+        <p>Tell us about your experience using KumariQuest.</p>
     </div>
-
-
-    <h2>💬 User Feedback</h2>
-
-    {% for review in reviews %}
-
-        <div class="review">
-
-            <strong>{{ review.user.username }}</strong>
-
-            <div class="stars">
-                {% if review.rating == 5 %}
-                    ⭐⭐⭐⭐⭐
-                {% elif review.rating == 4 %}
-                    ⭐⭐⭐⭐
-                {% elif review.rating == 3 %}
-                    ⭐⭐⭐
-                {% elif review.rating == 2 %}
-                    ⭐⭐
-                {% else %}
-                    ⭐
-                {% endif %}
-            </div>
-
-            <p>{{ review.comment }}</p>
-
-            <small>
-                {{ review.created_at|date:"d M Y" }}
-            </small>
-
+</section>
+<section class="section">
+    <div class="container">
+        <div class="form-card" style="margin:0 auto 34px;">
+            <form method="post" class="form-stack">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label for="rating">Your rating</label>
+                    <select id="rating" name="rating" required>
+                        <option value="5">5 — Excellent</option>
+                        <option value="4">4 — Very good</option>
+                        <option value="3">3 — Good</option>
+                        <option value="2">2 — Fair</option>
+                        <option value="1">1 — Poor</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="comment">Your feedback</label>
+                    <textarea id="comment" name="comment" rows="5" placeholder="Tell us about your experience..." required></textarea>
+                </div>
+                <button class="submit-button" type="submit">Submit feedback</button>
+            </form>
         </div>
-        <a href="/home/" class="back-home-btn">
-    ← Back to Home
-</a>
-
-    {% empty %}
-
-        <p>No feedback yet. Be the first to share your experience!</p>
-
-    {% endfor %}
-     
-</div>
-
-</body>
-</html>
+        <div class="section-heading">
+            <div><span class="eyebrow">From the community</span><h2>Recent feedback</h2></div>
+        </div>
+        {% for review in reviews %}
+            <article class="review">
+                <strong>{{ review.user.username }}</strong>
+                <div class="stars" aria-label="{{ review.rating }} out of 5 stars">★ {{ review.rating }}/5</div>
+                <p>{{ review.comment }}</p>
+                <small>{{ review.created_at|date:"d M Y" }}</small>
+            </article>
+        {% empty %}
+            <div class="empty-state">
+                <span class="empty-icon" aria-hidden="true">💬</span>
+                <h3>No feedback yet</h3>
+                <p>Share the first note about your experience with KumariQuest.</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,333 +1,69 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
+{% block title %}Explore destinations | KumariQuest{% endblock %}
 
-    <title>Explore Kanyakumari - KumariQuest</title>
-
-    <style>
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f8fafc;
-        }
-
-        .header {
-            background: #0f766e;
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 36px;
-        }
-
-        .header p {
-            margin-top: 10px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .search-area {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 35px;
-        }
-
-        .search-area input,
-        .search-area select {
-            padding: 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            font-size: 15px;
-        }
-
-        .search-area input {
-            flex: 1;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-
-        .card-image {
-            height: 180px;
-            background: #ccfbf1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 55px;
-            overflow: hidden;
-        }
-
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 20px;
-        }
-
-        .card-content h3 {
-            color: #115e59;
-            margin-top: 0;
-        }
-
-        .category {
-            display: inline-block;
-            background: #ccfbf1;
-            color: #0f766e;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        .explore-btn {
-            display: inline-block;
-            margin-top: 12px;
-            background: #0f766e;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .explore-btn:hover {
-            background: #115e59;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 40px;
-            color: #0f766e;
-            text-decoration: none;
-        }
-
-        @media (max-width: 800px) {
-            .cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 550px) {
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            .search-area {
-                flex-direction: column;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-    <div class="header">
-
-        <h1>🌴 Explore Kanyakumari</h1>
-
-        <p>
-            Discover beautiful destinations, heritage, nature and culture.
-        </p>
-
-    </div>
-
-
+{% block content %}
+<section class="page-hero">
     <div class="container">
-
-        <!-- Search and Filter -->
-
-        <div class="search-area">
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="🔍 Search destinations..."
-                onkeyup="filterDestinations()"
-            >
-
-            <select
-                id="categoryFilter"
-                onchange="filterDestinations()"
-            >
-
-                <option value="all">
-                    All Categories
-                </option>
-
-                <option value="Heritage">
-                    Heritage
-                </option>
-
-                <option value="Beach">
-                    Beach
-                </option>
-
-                <option value="Nature">
-                    Nature
-                </option>
-
-                <option value="Religious">
-                    Religious
-                </option>
-
-                <option value="Adventure">
-                    Adventure
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <!-- Destination Cards -->
-
-        <div class="cards">
-
-            {% for destination in destinations %}
-
-            <div
-                class="card destination-card"
-                data-name="{{ destination.name|lower }}"
-                data-category="{{ destination.category }}"
-            >
-
-                <div class="card-image">
-
-                    {% if destination.image %}
-
-                        <img
-                            src="{{ destination.image.url }}"
-                            alt="{{ destination.name }}"
-                        >
-
-                    {% else %}
-
-                        📍
-
-                    {% endif %}
-
-                </div>
-
-
-                <div class="card-content">
-
-                    <span class="category">
-                        {{ destination.category }}
-                    </span>
-
-                    <h3>
-                        {{ destination.name }}
-                    </h3>
-
-                    <p>
-                        {{ destination.description }}
-                    </p>
-
-                    <p>
-                        📍 {{ destination.location }}
-                    </p>
-
-                    <a
-                        href="{% url 'destination_detail' destination.pk %}"
-                        class="explore-btn"
-                    >
-                        Explore Destination →
-                    </a>
-
-                </div>
-
-            </div>
-
-            {% empty %}
-
-                <p>No destinations available yet.</p>
-
-            {% endfor %}
-
-        </div>
-
-
-        <a href="/home/" class="back">
-            ← Back to Home
-        </a>
-
+        <span class="eyebrow">Find your place</span>
+        <h1>Explore Kanyakumari</h1>
+        <p>Browse the destinations currently in our collection. Search by name or location, or narrow the list by category.</p>
     </div>
+</section>
 
+<section class="section" style="padding-top:30px;">
+    <div class="container">
+        <div class="explore-toolbar">
+            <input class="search-control" type="search" data-destination-search name="search" value="{{ request.GET.search|default:'' }}" placeholder="Search destinations or locations" aria-label="Search destinations">
+            <select class="search-control" data-category-filter aria-label="Filter by category">
+                <option value="all">All categories</option>
+                <option value="Heritage">Heritage</option>
+                <option value="Beach">Beach</option>
+                <option value="Nature">Nature</option>
+                <option value="Religious">Religious</option>
+                <option value="Adventure">Adventure</option>
+            </select>
+            <span data-initial-category="{{ request.GET.category|default:'' }}" hidden></span>
+        </div>
 
-    <script>
-
-        function filterDestinations() {
-
-            const search =
-                document.getElementById("searchInput")
-                .value
-                .toLowerCase();
-
-            const category =
-                document.getElementById("categoryFilter")
-                .value;
-
-            const cards =
-                document.querySelectorAll(".destination-card");
-
-
-            cards.forEach(function(card) {
-
-                const name =
-                    card.getAttribute("data-name");
-
-                const cardCategory =
-                    card.getAttribute("data-category");
-
-
-                const matchesSearch =
-                    name.includes(search);
-
-                const matchesCategory =
-                    category === "all" ||
-                    cardCategory === category;
-
-
-                if (matchesSearch && matchesCategory) {
-
-                    card.style.display = "block";
-
-                } else {
-
-                    card.style.display = "none";
-
-                }
-
-            });
-
-        }
-
-    </script>
-
-</body>
-
-</html>
+        {% if destinations %}
+            <p class="filter-count" data-filter-count aria-live="polite"></p>
+            <div class="cards">
+                {% for destination in destinations %}
+                    <article class="card" data-destination-card data-name="{{ destination.name|lower }}" data-location="{{ destination.location|lower }}" data-category="{{ destination.category }}">
+                        <div class="card-image">
+                            {% if destination.image %}
+                                <img src="{{ destination.image.url }}" alt="{{ destination.name }}" loading="lazy">
+                            {% else %}
+                                <span aria-hidden="true">📍</span>
+                            {% endif %}
+                        </div>
+                        <div class="card-content">
+                            <span class="category">{{ destination.category }}</span>
+                            <h3>{{ destination.name }}</h3>
+                            <p class="card-location">📍 {{ destination.location }}</p>
+                            <p>{{ destination.description|truncatewords:22 }}</p>
+                            <div class="card-meta">
+                                <span class="budget-badge">{{ destination.budget_level }} budget</span>
+                            </div>
+                            <a class="explore-btn" href="{% url 'destination_detail' destination.pk %}">View details →</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+            <div class="empty-state" data-filter-empty hidden style="margin-top:22px;">
+                <span class="empty-icon" aria-hidden="true">🔎</span>
+                <h3>No matching destinations</h3>
+                <p>Try another search or choose a different category.</p>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <span class="empty-icon" aria-hidden="true">🧭</span>
+                <h2>No destinations listed yet</h2>
+                <p>Our destination collection is currently empty. Check back later for places to explore.</p>
+                <a class="secondary-btn" href="{% url 'home' %}">Back to home</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,224 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Account | KumariQuest</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(120deg, #ccfbf1, #fff7ed);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+{% block title %}Create account | KumariQuest{% endblock %}
 
-        .register-box {
-            width: 400px;
-            background: white;
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #0f766e;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 25px;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            background: #0f766e;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #115e59;
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .login-link a,
-        .back {
-            color: #0f766e;
-            text-decoration: none;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="register-box">
-
-    <h1>🌴 KumariQuest</h1>
-
-    <p class="subtitle">Create your account</p>
-
-    {% if error %}
-        <div class="error">
-            {{ error }}
-        </div>
-    {% endif %}
-
-    <form method="POST">
-
-        {% csrf_token %}
-
-        <label>Username</label>
-        <input
-            type="text"
-            name="username"
-            placeholder="Enter username"
-            required
-        >
-
-        <label>Email</label>
-        <input
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            required
-        >
-
-        <label>Password</label>
-
-<div style="position: relative;">
-    <input
-        type="password"
-        name="password"
-        id="registerPassword"
-        placeholder="Enter your password"
-        required
-        style="padding-right: 45px;"
-    >
-
-    <button
-        type="button"
-        onclick="togglePassword('registerPassword', 'passwordButton')"
-        id="passwordButton"
-        style="
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: auto;
-            margin: 0;
-            padding: 5px;
-            background: none;
-            color: #0f766e;
-            font-size: 18px;
-        "
-    >👁️</button>
-</div>
-
-
-<label>Confirm Password</label>
-
-<div style="position: relative;">
-    <input
-        type="password"
-        name="confirm_password"
-        id="confirmPassword"
-        placeholder="Confirm your password"
-        required
-        style="padding-right: 45px;"
-    >
-
-    <button
-        type="button"
-        onclick="togglePassword('confirmPassword', 'confirmButton')"
-        id="confirmButton"
-        style="
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: auto;
-            margin: 0;
-            padding: 5px;
-            background: none;
-            color: #0f766e;
-            font-size: 18px;
-        "
-    >👁️</button>
-</div>
-
-        <button type="submit">
-            Create Account
-        </button>
-
-    </form>
-
-    <div class="login-link">
-        Already have an account?
-        <a href="/login/">Login</a>
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-card">
+        <a class="brand auth-brand" href="{% url 'home' %}">
+            <span class="brand-mark" aria-hidden="true">K</span>
+            <span class="brand-name">Kumari<span>Quest</span></span>
+        </a>
+        <span class="eyebrow">Join the journey</span>
+        <h1>Create your account</h1>
+        <p class="subtitle">Save your preferences and make planning your visit easier.</p>
+        {% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+        <form method="post" class="form-stack">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" autocomplete="username" required>
+            </div>
+            <div class="form-field">
+                <label for="email">Email address</label>
+                <input id="email" type="email" name="email" autocomplete="email" required>
+            </div>
+            <div class="form-field">
+                <label for="registerPassword">Password</label>
+                <div class="password-field">
+                    <input id="registerPassword" type="password" name="password" autocomplete="new-password" required>
+                    <button class="password-toggle" type="button" data-password-toggle="registerPassword" aria-label="Show password">Show</button>
+                </div>
+            </div>
+            <div class="form-field">
+                <label for="confirmPassword">Confirm password</label>
+                <div class="password-field">
+                    <input id="confirmPassword" type="password" name="confirm_password" autocomplete="new-password" required>
+                    <button class="password-toggle" type="button" data-password-toggle="confirmPassword" aria-label="Show password">Show</button>
+                </div>
+            </div>
+            <button class="submit-button" type="submit">Create account</button>
+        </form>
+        <p class="auth-footnote">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
     </div>
-
-    <a href="/home/" class="back">
-        ← Back to Home
-    </a>
-
-</div>
-
-<script>
-function togglePassword(inputId, buttonId) {
-    const password = document.getElementById(inputId);
-    const button = document.getElementById(buttonId);
-
-    if (password.type === "password") {
-        password.type = "text";
-        button.textContent = "🙈";
-    } else {
-        password.type = "password";
-        button.textContent = "👁️";
-    }
-}
-</script>
-
-</body>
-</html>
+</section>
+{% endblock %}

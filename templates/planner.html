@@ -1,267 +1,100 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends "base.html" %}
 
-    <title>KumariQuest - Smart Trip Planner</title>
+{% block title %}Trip planner | KumariQuest{% endblock %}
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0fdfa;
-            margin: 0;
-            padding: 40px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: auto;
-        }
-
-        h1 {
-            text-align: center;
-            color: #0f766e;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        .planner-box {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 35px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
-
-        select,
-        button {
-            width: 100%;
-            padding: 13px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-        }
-
-        button {
-            margin-top: 20px;
-            background: #0f766e;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #115e59;
-        }
-
-        .day {
-            background: white;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .day h2 {
-            color: #0f766e;
-        }
-
-        .place {
-            background: #f8fafc;
-            padding: 15px;
-            margin-top: 12px;
-            border-radius: 10px;
-        }
-
-        .place h3 {
-            margin: 0 0 8px;
-            color: #115e59;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #0f766e;
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-    <h1>🗺️ Smart Trip Planner</h1>
-
-    <p class="subtitle">
-        Create a simple travel plan for your Kanyakumari trip.
-    </p>
-
-
-    <!-- Planner Form -->
-
-    <div class="planner-box">
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            <label>📅 Number of Days</label>
-
-            <select name="days">
-
-                <option value="1">1 Day</option>
-                <option value="2">2 Days</option>
-                <option value="3">3 Days</option>
-                <option value="4">4 Days</option>
-                <option value="5">5 Days</option>
-
-            </select>
-
-
-            <label>🏛️ Select Interest</label>
-
-
-<select name="category">
-    <option value="All">All Categories</option>
-    <option value="Heritage">Heritage</option>
-    <option value="Beach">Beach</option>
-    <option value="Nature">Nature</option>
-    <option value="Religious">Religious</option>
-    <option value="Adventure">Adventure</option>
-</select>
-
-
-<label>👥 Trip Type</label>
-
-<select name="trip_type">
-    <option value="Family">Family</option>
-    <option value="Couple">Couple</option>
-    <option value="Solo">Solo</option>
-    <option value="Friends">Friends</option>
-</select>
-
-<label>💰 Budget</label>
-
-<select name="budget">
-
-    <option value="Budget">Budget</option>
-    <option value="Moderate">Moderate</option>
-    <option value="Luxury">Luxury</option>
-
-</select>
-
-
-
-            <button type="submit">
-                ✨ Generate My Trip
-            </button>
-
-        </form>
-
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">A helpful place to start</span>
+        <h1>Plan a Kanyakumari trip</h1>
+        <p>Choose your preferences and get a simple destination itinerary. This planner does not calculate routes or travel distances.</p>
     </div>
+</section>
 
-
-    <!-- Generated Itinerary -->
-
-{% if itinerary %}
-
-    <h2>✨ Your Personalized Itinerary</h2>
-
-    {% if selected_trip_type %}
-        <p>
-            <strong>Trip Type:</strong>
-            {{ selected_trip_type }}
-        </p>
-    {% endif %}
-
-    {% if selected_budget %}
-    <p>
-        <strong>Budget:</strong>
-        {{ selected_budget }}
-    </p>
-{% endif %}
-
-    {% for day in itinerary %}
-
-            <div class="day">
-
-                <h2>
-                    📅 Day {{ day.day }}
-                </h2>
-
-                {% for destination in day.destinations %}
-
-                    <div class="place">
-
-                        <h3>
-                            {{ destination.name }}
-                        </h3>
-
-                        <p>
-                            <strong>Category:</strong>
-                            {{ destination.category }}
-                        </p>
-
-                        <p>
-                            <strong>Location:</strong>
-                            {{ destination.location }}
-                        </p>
-
-                        <p>
-                            {{ destination.description }}
-                        </p>
-
-                        <a
-    href="https://www.google.com/maps/search/?api=1&query={{ destination.name|urlencode }}, {{ destination.location|urlencode }}"
-    target="_blank"
-    style="
-        display: inline-block;
-        margin-top: 10px;
-        padding: 10px 15px;
-        background: #0f766e;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-    "
->
-    📍 View on Map
-</a>
-
-                    </div>
-
-                {% empty %}
-
-                    <p>No destination available for this day.</p>
-
-                {% endfor %}
-
+<div class="container planner-layout">
+    <section class="planner-box">
+        <h2>Your trip preferences</h2>
+        <p>Adjust the options to create an itinerary based on the destinations currently listed.</p>
+        {% if planner_error %}
+            <div class="form-error" role="alert">{{ planner_error }}</div>
+        {% endif %}
+        <form method="post" class="form-stack">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="days">Number of days</label>
+                <select id="days" name="days" required>
+                    {% for day in "12345" %}
+                        <option value="{{ day }}" {% if selected_days|stringformat:"s" == day %}selected{% endif %}>{{ day }} {% if day == "1" %}day{% else %}days{% endif %}</option>
+                    {% endfor %}
+                </select>
             </div>
+            <div class="form-field">
+                <label for="category">Interest</label>
+                <select id="category" name="category" required>
+                    <option value="All" {% if selected_category == "All" %}selected{% endif %}>All categories</option>
+                    <option value="Heritage" {% if selected_category == "Heritage" %}selected{% endif %}>Heritage</option>
+                    <option value="Beach" {% if selected_category == "Beach" %}selected{% endif %}>Beach</option>
+                    <option value="Nature" {% if selected_category == "Nature" %}selected{% endif %}>Nature</option>
+                    <option value="Religious" {% if selected_category == "Religious" %}selected{% endif %}>Religious</option>
+                    <option value="Adventure" {% if selected_category == "Adventure" %}selected{% endif %}>Adventure</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="trip_type">Who are you travelling with?</label>
+                <select id="trip_type" name="trip_type" required>
+                    <option value="Family" {% if selected_trip_type == "Family" %}selected{% endif %}>Family</option>
+                    <option value="Couple" {% if selected_trip_type == "Couple" %}selected{% endif %}>Couple</option>
+                    <option value="Solo" {% if selected_trip_type == "Solo" %}selected{% endif %}>Solo</option>
+                    <option value="Friends" {% if selected_trip_type == "Friends" %}selected{% endif %}>Friends</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="budget">Budget preference</label>
+                <select id="budget" name="budget" required>
+                    <option value="Budget" {% if selected_budget == "Budget" %}selected{% endif %}>Budget</option>
+                    <option value="Moderate" {% if selected_budget == "Moderate" %}selected{% endif %}>Moderate</option>
+                    <option value="Luxury" {% if selected_budget == "Luxury" %}selected{% endif %}>Luxury</option>
+                </select>
+            </div>
+            <button class="submit-button" type="submit">Create my itinerary →</button>
+        </form>
+    </section>
 
-        {% endfor %}
-
-    {% endif %}
-
-
-    <a href="/home/" class="back">
-        ← Back to Home
-    </a>
-
+    <section class="planner-results" aria-live="polite">
+        {% if itinerary %}
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">Your starting itinerary</span>
+                    <h2>{{ selected_days }}-day plan</h2>
+                    <p>{{ selected_trip_type }} trip · {{ selected_budget }} preference</p>
+                </div>
+            </div>
+            {% for day in itinerary %}
+                <article class="day">
+                    <h2>Day {{ day.day }}</h2>
+                    {% for destination in day.destinations %}
+                        <div class="place">
+                            <span class="category">{{ destination.category }}</span>
+                            <h3>{{ destination.name }}</h3>
+                            <p>📍 {{ destination.location }}</p>
+                            <p>{{ destination.description|truncatewords:28 }}</p>
+                            <a class="text-link" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&amp;query={{ destination.name|urlencode }},{{ destination.location|urlencode }}">View on Google Maps ↗</a>
+                        </div>
+                    {% empty %}
+                        <div class="empty-state">
+                            <h3>No destination matched this day</h3>
+                            <p>Try a different interest or budget preference.</p>
+                        </div>
+                    {% endfor %}
+                </article>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <span class="empty-icon" aria-hidden="true">🗺️</span>
+                <h2>Your itinerary will appear here</h2>
+                <p>Choose the number of days, interests, and budget on the left to get started. Your plan is a suggestion, not a route or booking.</p>
+            </div>
+        {% endif %}
+    </section>
 </div>
-
-</body>
-</html>
+{% endblock %}

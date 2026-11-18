@@ -6,6 +6,7 @@ from accounts.models import Profile
 def home(request):
 
     destinations = Destination.objects.all()
+    hero_destination = destinations.exclude(image="").first()
 
     unread_count = 0
     profile = None
@@ -22,6 +23,7 @@ def home(request):
 
     return render(request, "home.html", {
         "destinations": destinations,
+        "hero_destination": hero_destination,
         "unread_count": unread_count,
         "profile": profile
     })

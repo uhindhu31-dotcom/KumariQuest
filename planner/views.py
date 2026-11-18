@@ -8,11 +8,44 @@ def planner_home(request):
     all_destinations = Destination.objects.all()
 
     if request.method == "POST":
-
-        days = int(request.POST.get("days", 1))
+        raw_days = request.POST.get("days", "1")
         category = request.POST.get("category", "All")
         trip_type = request.POST.get("trip_type", "Family")
         budget = request.POST.get("budget", "Budget")
+        selected_days = raw_days
+
+        valid_categories = {"All", "Heritage", "Beach", "Nature", "Religious", "Adventure"}
+        valid_trip_types = {"Family", "Couple", "Solo", "Friends"}
+        valid_budgets = {"Budget", "Moderate", "Luxury"}
+
+        try:
+            days = int(raw_days)
+        except (TypeError, ValueError):
+            days = None
+
+        planner_error = None
+        if days not in range(1, 6):
+            planner_error = "Choose a trip length between 1 and 5 days."
+        elif category not in valid_categories:
+            planner_error = "Choose one of the listed interests."
+        elif trip_type not in valid_trip_types:
+            planner_error = "Choose one of the listed travel groups."
+        elif budget not in valid_budgets:
+            planner_error = "Choose one of the listed budget preferences."
+
+        if planner_error:
+            return render(
+                request,
+                "planner.html",
+                {
+                    "destinations": all_destinations,
+                    "selected_days": selected_days,
+                    "selected_category": category,
+                    "selected_trip_type": trip_type,
+                    "selected_budget": budget,
+                    "planner_error": planner_error,
+                }
+            )
 
         # Save trip for logged-in user
         if request.user.is_authenticated:
